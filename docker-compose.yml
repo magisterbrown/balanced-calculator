@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres
+    volumes: 
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - ./operations_django/operations.env
+  operations:
+    build: ./operations_django/
+    env_file:
+      - ./operations_django/operations.env
+    depends_on: 
+      - db
+  nginx:
+    build: ./nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - operations
